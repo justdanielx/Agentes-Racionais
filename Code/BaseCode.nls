@@ -1,19 +1,23 @@
+globals [cargaMáxima]
+
 breed [Exploradores Explorador]
 breed [Coletores Coletor]
 
-patches-own [Tipo QtdRecurso Rasto]
+patches-own [Tipo QtdRecurso]
 
-turtles-own [Energia]
-Exploradores-own []
-Coletores-own []
+turtles-own [Energia Estado Velocidade Perceção]
+Exploradores-own [recursoEncontrado]
+;Estado: Explorar → RecursoEncontrado → Comunicar → Explorar
+Coletores-own [cargaAtual recurso]
+;Estado: Procurar → IrRecurso → Recolher → RegressarBase → DEPOSITAR/RECARREGAR
 
 to Setup
     clear-all
+
+    set cargaMáxima 10
+
     SetupPatches
     SetupTurtles
-
-
-
     reset-ticks
 end
 

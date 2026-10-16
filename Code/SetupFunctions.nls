@@ -26,5 +26,26 @@ to SetupPatches
 end
 
 to SetupTurtles
+    create-Exploradores nExploradores [
+        set Energia 125 + random 51 ;entre 125 e 175
+        set Estado "Explorar"
+        set Velocidade 2
+        set Perceção 2.9 ;2 circulos à volta do agente + a própria patch
+        set recursoEncontrado nobody
+        set shape "person soldier"
+        set color gray + 1
+        set size 1.2
+    ]
 
+    create-Coletores nColetores [
+        set Energia 125 + random 51
+        set Estado "Procurar"
+        set Velocidade 1
+        set Perceção 1.5 ;1 círculo à volta do agente + a própria patch
+        set cargaAtual 0
+        set recurso nobody
+        set shape "person construction"
+        set color gray + 1
+        set size 1
+    ]
 end
