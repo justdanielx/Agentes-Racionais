@@ -11,3 +11,6 @@ Autores: Daniel Ramada, Afonso Santos
 
 ### Criar uma branch nova
 - `git checkout -b <branch name>`
+
+### Ver o estado do branch
+- `git status`
