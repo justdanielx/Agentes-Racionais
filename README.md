@@ -14,3 +14,20 @@ Autores: Daniel Ramada, Afonso Santos
 
 ### Ver o estado do branch
 - `git status`
+
+### Meter changes como staged
+- `git add <file name>`
+- `git add .` para adicionar todos os ficheiros
+
+### Commit com mensagem
+- `git commit -m "Mensagem da alteração"`
+
+### Mandar código para o github
+- `git push`
+
+### Ir buscar código ao github
+- `git pull`
+
+### Merge de um branch para o branch atual
+- `git merge <branch to merge>`
+- `git merge main` Manda o branch main para dentro do branch atual
