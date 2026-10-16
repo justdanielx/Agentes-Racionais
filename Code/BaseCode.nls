@@ -1,0 +1,22 @@
+breed [Exploradores Explorador]
+breed [Coletores Coletor]
+
+patches-own [Tipo QtdRecurso Rasto]
+
+turtles-own [Energia]
+Exploradores-own []
+Coletores-own []
+
+to Setup
+    clear-all
+    SetupPatches
+    SetupTurtles
+
+
+
+    reset-ticks
+end
+
+to Go
+
+end
