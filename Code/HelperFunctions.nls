@@ -1,0 +1,46 @@
+to verifyEnergy
+    if (Estado != "RegressarBase") and (Energia < limiteEnergia) [
+        set Estado "RegressarBase"
+    ]
+end
+
+to checkDeath
+    ask turtles [
+        if Energia <= 0 [
+            die
+        ]
+    ]
+end
+
+to goTo [alvoX alvoY]
+    ifelse desvio > 0
+        [set desvio (desvio - 1)]
+        [
+            face patch alvoX alvoY
+            set heading ((round (heading / 90)) * 90) mod 360 ;impede movimentos na diagonal
+        ]
+
+    let frenteLivre (patch-ahead 1 != nobody) and ([Tipo] of patch-ahead 1 != "Obstáculo" and [Tipo] of patch-ahead 1 != "Recurso")
+    let esquerdaLivre (patch-left-and-ahead 90 1 != nobody) and ([Tipo] of patch-left-and-ahead 90 1 != "Obstáculo" and [Tipo] of patch-left-and-ahead 90 1 != "Recurso")
+    let direitaLivre (patch-right-and-ahead 90 1 != nobody) and ([Tipo] of patch-right-and-ahead 90 1 != "Obstáculo" and [Tipo] of patch-right-and-ahead 90 1 != "Recurso")
+    let atrásLivre (patch-right-and-ahead 180 1 != nobody) and ([Tipo] of patch-right-and-ahead 180 1 != "Obstáculo" and [Tipo] of patch-right-and-ahead 180 1 != "Recurso")
+
+    ifelse frenteLivre 
+        [forward 1]
+        [
+            set desvio 3
+            ifelse esquerdaLivre and direitaLivre 
+                [rt one-of [90 -90]]
+                [
+                    ifelse esquerdaLivre 
+                    [rt -90]
+                    [
+                        ifelse direitaLivre 
+                            [rt 90]
+                            [if atrásLivre [rt 180]]
+                    ]
+                ]
+        ]
+
+    set Energia (Energia - 1)
+end

@@ -6,17 +6,17 @@ to moveExplorador
 
         let rx recursoX
         let ry recursoY
-        
+
         let novos patches in-radius Perceção with [Tipo = "Recurso" and (pxcor != rx or pycor != ry)]
 
         if any? novos [
             let alvo min-one-of novos [distance myself]
             set recursoX [pxcor] of alvo
             set recursoY [pycor] of alvo
-            set conhecido? true 
+            set conhecido? true
         ]
 
-        ifelse Estado = "Explorar" 
+        ifelse Estado = "Explorar"
             [explore]
             [if Estado = "RegressarBase" [goBackBase]]
     ]
@@ -42,25 +42,18 @@ to moveColetor
             [explore]
             [
                 ifelse Estado = "IrRecurso"
+                    [goRecurso]
                     [
-
-                    ]
-                    [ifelse Estado = "Recolher" 
-                        [
-
-                        ]
-                        [if Estado = "RegressarBase" [goBackBase]]
+                        ifelse Estado = "Recolher" 
+                            [recolher]
+                            [if Estado = "RegressarBase" [goBackBase]]
                     ]
             ]
 
     ]
 end
 
-to verifyEnergy
-    if (Estado != "RegressarBase") and (Energia < limiteEnergia) [
-        set Estado "RegressarBase"
-    ]
-end
+
 
 to shareInfo
     if Comunicação? and conhecido? [
@@ -100,37 +93,41 @@ to explore
     set Energia (Energia - 1)
 end
 
+to goRecurso
+    if Estado = "IrRecurso" [
+        ifelse member? (patch recursoX recursoY) neighbors4
+            [set Estado "Recolher"]
+            [goTo recursoX recursoY]
+    ]
+end
+
+to recolher
+    ifelse (distancexy recursoX recursoY <= Perceção) and ([Tipo] of patch recursoX recursoY != "Recurso")
+    [
+        set conhecido? false
+        ifelse cargaAtual > 0
+            [set Estado "RegressarBase"]
+            [set Estado "Explorar"]
+    ] ;ve se a pacth que era recurso ja esgotou dentro do seu nivel de percecao, e dependendo de se tem carga volta a base ou explora
+    [
+        ask patch recursoX recursoY [
+            set QtdRecurso (QtdRecurso - 1)
+            if QtdRecurso = 0 [
+                set Tipo "Terreno Livre"
+                set pcolor green
+            ]
+        ]
+
+        set cargaAtual (cargaAtual + 1)
+        set Energia (Energia - 1)
+
+        if [Tipo] of patch recursoX recursoY != "Recurso" [set conhecido? false]
+        if cargaAtual >= cargaMáxima [set Estado "RegressarBase"]
+    ]
+end
+
 to goBackBase
-    ifelse desvio > 0
-        [set desvio (desvio - 1)]
-        [
-            face patch baseX baseY
-            set heading ((round (heading / 90)) * 90) mod 360 ;impede movimentos na diagonal
-        ]
-
-    let frenteLivre (patch-ahead 1 != nobody) and ([Tipo] of patch-ahead 1 != "Obstáculo" and [Tipo] of patch-ahead 1 != "Recurso")
-    let esquerdaLivre (patch-left-and-ahead 90 1 != nobody) and ([Tipo] of patch-left-and-ahead 90 1 != "Obstáculo" and [Tipo] of patch-left-and-ahead 90 1 != "Recurso")
-    let direitaLivre (patch-right-and-ahead 90 1 != nobody) and ([Tipo] of patch-right-and-ahead 90 1 != "Obstáculo" and [Tipo] of patch-right-and-ahead 90 1 != "Recurso")
-    let atrásLivre (patch-right-and-ahead 180 1 != nobody) and ([Tipo] of patch-right-and-ahead 180 1 != "Obstáculo" and [Tipo] of patch-right-and-ahead 180 1 != "Recurso")
-
-    ifelse frenteLivre 
-        [forward 1]
-        [
-            set desvio 3
-            ifelse esquerdaLivre and direitaLivre 
-                [rt one-of [90 -90]]
-                [
-                    ifelse esquerdaLivre 
-                    [rt -90]
-                    [
-                        ifelse direitaLivre 
-                            [rt 90]
-                            [if atrásLivre [rt 180]]
-                    ]
-                ]
-        ]
-
-    set Energia (Energia - 1)
+    goTo baseX baseY
 
     if [Tipo] of patch-here = "Base" [
         ifelse Energia + (0.5 * EnergiaMax) >= EnergiaMax
@@ -147,13 +144,5 @@ to goBackBase
                     [set Estado "Explorar"]
             ]
             [if breed = Exploradores [set Estado "Explorar"]]
-    ]
-end
-
-to checkDeath
-    ask turtles [
-        if Energia <= 0 [
-            die
-        ]
     ]
 end
