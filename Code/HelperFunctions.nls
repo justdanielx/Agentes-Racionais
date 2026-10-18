@@ -33,6 +33,7 @@ to goTo [alvoX alvoY]
                 [rt one-of [90 -90]]
                 [
                     ifelse esquerdaLivre 
+
                     [rt -90]
                     [
                         ifelse direitaLivre 
@@ -43,4 +44,20 @@ to goTo [alvoX alvoY]
         ]
 
     set Energia (Energia - 1)
+end
+
+to agruparRecursos
+    let probabilidade nRecursos / 4.5
+    if any? neighbors4 with [Tipo = "Recurso"] [set probabilidade 95]
+
+    ifelse random-float 100 < probabilidade
+        [
+            set Tipo "Recurso"
+            set QtdRecurso 15 + random 11
+            set pcolor yellow
+        ]
+        [
+            set Tipo "Terreno Livre"
+            set pcolor green
+        ]
 end

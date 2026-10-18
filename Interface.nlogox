@@ -43,6 +43,7 @@
         <update>plot recursosEntregues</update>
       </pen>
     </plot>
+    <switch x="540" y="305" height="40" on="false" variable="distribuiçãoAgrupada?" width="155" display="distribuiçãoAgrupada?"></switch>
   </widgets>
   <info>## WHAT IS IT?
 
