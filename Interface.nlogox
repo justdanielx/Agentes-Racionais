@@ -2,17 +2,20 @@
 <model version="NetLogo 7.0.4" snapToGrid="true">
   <code>
 
-	__includes["Code/BaseCode.nls" "Code/SetupFunctions.nls"]
+	__includes["Code/BaseCode.nls" "Code/SetupFunctions.nls" "Code/MoveFunctions.nls"] 
 
   </code>
   <widgets>
     <view x="755" wrappingAllowedX="false" y="50" frameRate="30.0" minPycor="-25" height="718" showTickCounter="true" patchSize="14.0" fontSize="10" wrappingAllowedY="false" width="718" tickCounterLabel="ticks" maxPycor="25" updateMode="0" maxPxcor="25" minPxcor="-25"></view>
-    <button x="180" y="75" height="40" disableUntilTicks="false" forever="false" kind="Observer" width="55" display="Go">Go</button>
+    <button x="180" y="75" height="40" disableUntilTicks="false" forever="true" kind="Observer" width="55" display="Go">Go</button>
     <button x="250" y="75" height="40" disableUntilTicks="false" forever="false" kind="Observer" width="55" display="Setup">Setup</button>
     <slider x="135" step="1" y="150" max="15" width="250" display="nObstáculos" height="50" min="5" direction="Horizontal" default="10.0" variable="nObstáculos" units="%"></slider>
     <slider x="135" step="1" y="205" max="10" width="250" display="nRecursos" height="50" min="5" direction="Horizontal" default="5.0" variable="nRecursos" units="%"></slider>
     <slider x="135" step="1" y="280" max="50" width="250" display="nExploradores" height="50" min="0" direction="Horizontal" default="15.0" variable="nExploradores"></slider>
     <slider x="135" step="1" y="335" max="50" width="250" display="nColetores" height="50" min="0" direction="Horizontal" default="25.0" variable="nColetores"></slider>
+    <slider x="415" step="1" y="150" max="15" width="250" display="cargaMáxima" height="50" min="5" direction="Horizontal" default="10.0" variable="cargaMáxima"></slider>
+    <slider x="415" step="1" y="210" max="125" width="250" display="limiteEnergia" height="50" min="75" direction="Horizontal" default="100.0" variable="limiteEnergia"></slider>
+    <switch x="415" y="305" height="40" on="false" variable="Comunicação?" width="115" display="Comunicação?"></switch>
   </widgets>
   <info>## WHAT IS IT?
 

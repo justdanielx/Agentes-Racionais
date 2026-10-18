@@ -1,5 +1,5 @@
 to SetupPatches
-    ask patch 0 0 [
+    ask patch baseX baseY [
         set Tipo "Base"
         set pcolor gray - 1
     ]
@@ -27,25 +27,43 @@ end
 
 to SetupTurtles
     create-Exploradores nExploradores [
-        set Energia 125 + random 51 ;entre 125 e 175
+        set Energia 250 + random 101 ;entre 250 e 350
+        set EnergiaMax Energia
         set Estado "Explorar"
         set Velocidade 2
         set Perceção 2.9 ;2 circulos à volta do agente + a própria patch
-        set recursoEncontrado nobody
         set shape "person soldier"
         set color gray + 1
         set size 1.2
+
+        set conhecido? false
+        set desvio 0
+
+        let x random 100
+        if x < 25 [set heading 0]
+        if (x >= 25) and (x < 50) [set heading 90]
+        if (x >= 50) and (x < 75) [set heading 180]
+        if (x >= 75) and (x < 100) [set heading 270]
     ]
 
     create-Coletores nColetores [
-        set Energia 125 + random 51
-        set Estado "Procurar"
+        set Energia 225 + random 51 ;entre 225 e 275
+        set EnergiaMax Energia
+        set Estado "Explorar"
         set Velocidade 1
         set Perceção 1.5 ;1 círculo à volta do agente + a própria patch
-        set cargaAtual 0
-        set recurso nobody
         set shape "person construction"
         set color gray + 1
         set size 1
+
+        set cargaAtual 0
+        set conhecido? false
+        set desvio 0
+
+        let x random 100
+        if x < 25 [set heading 0]
+        if (x >= 25) and (x < 50) [set heading 90]
+        if (x >= 50) and (x < 75) [set heading 180]
+        if (x >= 75) and (x < 100) [set heading 270]
     ]
 end

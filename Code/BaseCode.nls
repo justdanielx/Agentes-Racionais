@@ -1,20 +1,21 @@
-globals [cargaMáxima]
+globals [baseX baseY]
 
 breed [Exploradores Explorador]
 breed [Coletores Coletor]
 
 patches-own [Tipo QtdRecurso]
 
-turtles-own [Energia Estado Velocidade Perceção]
-Exploradores-own [recursoEncontrado]
-;Estado: Explorar → RecursoEncontrado → Comunicar → Explorar
-Coletores-own [cargaAtual recurso]
-;Estado: Procurar → IrRecurso → Recolher → RegressarBase → DEPOSITAR/RECARREGAR
+turtles-own [Energia EnergiaMax Estado Velocidade Perceção recursoX recursoY conhecido? desvio]
+Exploradores-own []
+;Estado: Explorar/RegressarBase
+Coletores-own [cargaAtual]
+;Estado: Explorar/IrRecurso/RegressarBase
 
 to Setup
     clear-all
 
-    set cargaMáxima 10
+    set baseX 0
+    set baseY 0
 
     SetupPatches
     SetupTurtles
@@ -22,5 +23,13 @@ to Setup
 end
 
 to Go
+    ask turtles [
+        if breed = Exploradores [moveExplorador]
+        if breed = Coletores [moveColetor]
+    ]
 
+    checkDeath
+    
+    tick
+    if count turtles = 0 [stop]
 end
