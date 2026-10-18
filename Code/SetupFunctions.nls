@@ -16,7 +16,7 @@ to SetupPatches
                 set tipo "Recurso" ;Ouro
                 set QtdRecurso 15 + random 11 ;entre 15 e 25
                 set pcolor yellow
-            ] 
+            ]
             [
                 set tipo "Terreno Livre" ;Relva
                 set pcolor green

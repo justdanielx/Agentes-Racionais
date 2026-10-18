@@ -28,7 +28,7 @@ to goTo [alvoX alvoY]
     ifelse frenteLivre 
         [forward 1]
         [
-            set desvio 3
+            set desvio 2
             ifelse esquerdaLivre and direitaLivre 
                 [rt one-of [90 -90]]
                 [

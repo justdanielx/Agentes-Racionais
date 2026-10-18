@@ -1,4 +1,4 @@
-globals [baseX baseY recursosEntregues]
+globals [baseX baseY recursosEntregues extinçãoExploradores extinçãoColetores]
 
 breed [Exploradores Explorador]
 breed [Coletores Coletor]
@@ -17,6 +17,8 @@ to Setup
     set baseX 0
     set baseY 0
     set recursosEntregues 0
+    set extinçãoExploradores -1
+    set extinçãoColetores -1
 
     SetupPatches
     SetupTurtles
@@ -32,5 +34,10 @@ to Go
     checkDeath
     
     tick
+
+    if extinçãoExploradores = -1 and count Exploradores = 0 [set extinçãoExploradores ticks]
+    if extinçãoColetores = -1 and count Coletores = 0 [set extinçãoColetores ticks]
+
+    if ticks >= maxTicks [stop]
     if count turtles = 0 [stop]
 end
