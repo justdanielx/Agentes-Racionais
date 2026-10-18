@@ -1,5 +1,10 @@
 to verifyEnergy
-    if (Estado != "RegressarBase") and (Energia < limiteEnergia) [
+    let limite limiteEnergia
+    if limiteDinâmico? [
+        let estimado (3 * (abs (pxcor - baseX) + abs (pycor - baseY))) + 40
+        set limite max (list limiteEnergia estimado)
+    ]
+    if (Estado != "RegressarBase") and (Energia < limite) [
         set Estado "RegressarBase"
     ]
 end
@@ -60,4 +65,13 @@ to agruparRecursos
             set Tipo "Terreno Livre"
             set pcolor green
         ]
+end
+
+to reaparecerRecursos
+    ask patches with [Reaparece > 0 and ticks >= Reaparece and not any? turtles-here] [
+        set Tipo "Recurso"
+        set QtdRecurso 15 + random 11
+        set pcolor yellow
+        set Reaparece 0
+    ]
 end

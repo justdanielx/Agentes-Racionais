@@ -3,7 +3,7 @@ globals [baseX baseY recursosEntregues extinçãoExploradores extinçãoColetore
 breed [Exploradores Explorador]
 breed [Coletores Coletor]
 
-patches-own [Tipo QtdRecurso]
+patches-own [Tipo QtdRecurso Reaparece]
 
 turtles-own [Energia EnergiaMax Estado Velocidade Perceção recursoX recursoY conhecido? desvio]
 Exploradores-own []

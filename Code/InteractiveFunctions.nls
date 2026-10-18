@@ -115,6 +115,7 @@ to recolher
             if QtdRecurso = 0 [
                 set Tipo "Terreno Livre"
                 set pcolor green
+                if recursosReaparecem? [set Reaparece ticks + 250]
             ]
         ]
 
