@@ -1,4 +1,4 @@
-globals [baseX baseY]
+globals [baseX baseY recursosEntregues]
 
 breed [Exploradores Explorador]
 breed [Coletores Coletor]
@@ -9,13 +9,14 @@ turtles-own [Energia EnergiaMax Estado Velocidade Perceção recursoX recursoY c
 Exploradores-own []
 ;Estado: Explorar/RegressarBase
 Coletores-own [cargaAtual]
-;Estado: Explorar/IrRecurso/RegressarBase
+;Estado: Explorar/IrRecurso/Recolher/RegressarBase
 
 to Setup
     clear-all
 
     set baseX 0
     set baseY 0
+    set recursosEntregues 0
 
     SetupPatches
     SetupTurtles

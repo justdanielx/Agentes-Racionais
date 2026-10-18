@@ -27,10 +27,10 @@ end
 
 to SetupTurtles
     create-Exploradores nExploradores [
-        set Energia 250 + random 101 ;entre 250 e 350
+        set Energia 275 + random 101 ;entre 275 e 375
         set EnergiaMax Energia
         set Estado "Explorar"
-        set Velocidade 2
+        set Velocidade 3
         set Perceção 2.9 ;2 circulos à volta do agente + a própria patch
         set shape "person soldier"
         set color gray + 1
