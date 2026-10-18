@@ -1,0 +1,120 @@
+to moveExplorador
+    repeat Velocidade [
+
+        verifyEnergy
+        shareInfo
+
+        let rx recursoX
+        let ry recursoY
+        
+        let novos patches in-radius Perceção with [Tipo = "Recurso" and (pxcor != rx or pycor != ry)]
+
+        if any? novos [
+            let alvo min-one-of novos [distance myself]
+            set recursoX [pxcor] of alvo
+            set recursoY [pycor] of alvo
+            set conhecido? true 
+        ]
+
+        ifelse Estado = "Explorar" 
+            [explore]
+            [if Estado = "RegressarBase" [goBackBase]]
+    ]
+end
+
+to moveColetor
+
+end
+
+to verifyEnergy
+    if (Estado != "RegressarBase") and (Energia < limiteEnergia) [
+        set Estado "RegressarBase"
+    ]
+end
+
+to shareInfo
+    if Comunicação? and conhecido? [
+        let candidatos Coletores in-radius Perceção with [Estado = "Explorar"]
+        if any? candidatos [
+            let candidato min-one-of candidatos [distance myself]
+            set conhecido? false
+            ask candidato [
+                set recursoX [recursoX] of myself
+                set recursoY [recursoY] of myself
+                set conhecido? true
+                set Estado "IrRecurso"
+            ]
+        ]
+    ]
+end
+
+to explore
+    ifelse (can-move? 1) and ([tipo] of patch-ahead 1 != "Obstáculo" and [Tipo] of patch-ahead 1 != "Recurso") [
+        ifelse [Tipo] of patch-ahead 1 = "Base" [
+            forward 1
+            ifelse Energia + (0.5 * (EnergiaMax)) >= EnergiaMax
+                [set Energia EnergiaMax]
+                [set Energia Energia + (0.5 * (EnergiaMax))] ;Energia atual + 50% da energia definida inicialmente
+        ]
+        [
+            if [Tipo] of patch-ahead 1 = "Terreno Livre" [
+                let x random 100
+                if x < 90 [forward 1]
+                if (x >= 90) and (x < 95) [rt 90]
+                if (x >= 95) and (x < 100) [rt -90]
+            ]
+        ]
+    ]
+    [rt one-of [90 -90 180]] ;Direita, Esquerda, Para Trás
+
+    set Energia (Energia - 1)
+end
+
+to goBackBase
+    ifelse desvio > 0
+        [set desvio (desvio - 1)]
+        [
+            face patch baseX baseY
+            set heading ((round (heading / 90)) * 90) mod 360 ;impede movimentos na diagonal
+        ]
+
+    let frenteLivre (patch-ahead 1 != nobody) and ([Tipo] of patch-ahead 1 != "Obstáculo" and [Tipo] of patch-ahead 1 != "Recurso")
+    let esquerdaLivre (patch-left-and-ahead 90 1 != nobody) and ([Tipo] of patch-left-and-ahead 90 1 != "Obstáculo" and [Tipo] of patch-left-and-ahead 90 1 != "Recurso")
+    let direitaLivre (patch-right-and-ahead 90 1 != nobody) and ([Tipo] of patch-right-and-ahead 90 1 != "Obstáculo" and [Tipo] of patch-right-and-ahead 90 1 != "Recurso")
+    let atrásLivre (patch-right-and-ahead 180 1 != nobody) and ([Tipo] of patch-right-and-ahead 180 1 != "Obstáculo" and [Tipo] of patch-right-and-ahead 180 1 != "Recurso")
+
+    ifelse frenteLivre 
+        [forward 1]
+        [
+            set desvio 3
+            ifelse esquerdaLivre and direitaLivre 
+                [rt one-of [90 -90]]
+                [
+                    ifelse esquerdaLivre 
+                    [rt -90]
+                    [
+                        ifelse direitaLivre 
+                            [rt 90]
+                            [if atrásLivre [rt 180]]
+                    ]
+                ]
+        ]
+
+    set Energia (Energia - 1)
+
+    if [Tipo] of patch-here = "Base" [
+        ifelse Energia + (0.5 * EnergiaMax) >= EnergiaMax
+            [set Energia EnergiaMax]
+            [set Energia Energia + (0.5 * EnergiaMax)]
+        set desvio 0
+        set Estado "Explorar"
+    ]
+end
+
+to checkDeath
+    ask turtles [
+        if Energia <= 0 [
+            die
+        ]
+    ]
+end
